@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
     <head>
         <meta charset="utf-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="description" content="CX Faculty provides customer experience strategy, blog insights, and a secure admin CMS for managing content and inquiries.">
         <meta name="theme-color" content="#000000">
@@ -31,13 +32,10 @@
 
         <style>
             html {
-                background-color: #000000;
                 scroll-behavior: smooth;
             }
 
             body {
-                background-color: #000000;
-                color: #ffffff;
                 min-height: 100vh;
             }
 

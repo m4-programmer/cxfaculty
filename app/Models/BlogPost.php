@@ -17,6 +17,9 @@ class BlogPost extends Model
         'excerpt',
         'body',
         'featured_image',
+        'reading_time',
+        'tags',
+        'views',
         'published_at',
         'is_published',
     ];
@@ -25,6 +28,15 @@ class BlogPost extends Model
         'published_at' => 'datetime',
         'is_published' => 'boolean',
     ];
+
+    protected $appends = [
+        'tags_array',
+    ];
+
+    public function getTagsArrayAttribute(): array
+    {
+        return $this->tags ? explode(',', $this->tags) : [];
+    }
 
     public function author()
     {
