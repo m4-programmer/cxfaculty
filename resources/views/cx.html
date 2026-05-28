@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The CX Faculty — Customer Experience Consulting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --amber: #ffc107;
+    --amber-dark: #e6a800;
+    --amber-light: #fff3cd;
+    --white: #ffffff;
+    --gray-100: #f5f5f5;
+    --gray-200: #e8e8e8;
+    --gray-400: #999999;
+    --gray-600: #555555;
+    --gray-800: #222222;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: var(--amber);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(255,193,7,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.12s ease-out;
+  }
+  .cursor.hover { width: 20px; height: 20px; }
+  .cursor-ring.hover { width: 52px; height: 52px; border-color: var(--amber); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 5%;
+    transition: background 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(12px);
+    padding: 1rem 5%;
+    border-bottom: 1px solid rgba(255,193,7,0.15);
+  }
+  .nav-logo img { height: 44px; }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--amber); }
+  .nav-cta {
+    background: var(--amber);
+    color: var(--black);
+    border: none;
+    padding: 0.65rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: none;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--amber-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 5%;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 50%;
+    border: 1px solid rgba(255,193,7,0.08);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 5%;
+    right: 0%;
+    width: 45vw;
+    height: 45vw;
+    border-radius: 50%;
+    border: 1px solid rgba(255,193,7,0.05);
+    pointer-events: none;
+  }
+  .hero-grid-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(255,193,7,0.12) 30%, rgba(255,193,7,0.12) 70%, transparent);
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 2; padding-top: 6rem; }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .hero-eyebrow span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s ease forwards;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .hero-desc {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s ease forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s ease forwards;
+  }
+  .btn-primary {
+    background: var(--amber);
+    color: var(--black);
+    border: none;
+    padding: 1rem 2.25rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--amber-dark); transform: translateY(-2px); }
+  .btn-primary svg { width: 18px; height: 18px; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 1rem 2.25rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+
+  .hero-visual {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 6rem;
+    opacity: 0;
+    animation: fadeIn 1.2s 0.9s ease forwards;
+  }
+  .hero-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: rgba(255,193,7,0.15);
+    border: 1px solid rgba(255,193,7,0.15);
+  }
+  .hero-stat {
+    background: var(--black);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .hero-stat:hover { background: #0a0a0a; }
+  .hero-stat::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--amber);
+    transition: width 0.4s;
+  }
+  .hero-stat:hover::after { width: 100%; }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .hero-stat-label {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--amber);
+    padding: 0.85rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: inline-flex;
+    gap: 0;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--black);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .ticker-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--black);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* SECTIONS */
+  section { position: relative; }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-label span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  /* ABOUT / PHILOSOPHY */
+  .philosophy {
+    padding: 8rem 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .philosophy-left { }
+  .philosophy-left h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+  .philosophy-left h2 em { color: var(--amber); font-style: italic; }
+  .philosophy-left p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+  .philosophy-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .pillar {
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: padding-left 0.3s;
+    cursor: default;
+  }
+  .pillar:hover { padding-left: 0.75rem; }
+  .pillar:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+  .pillar-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--amber);
+    padding-top: 0.3rem;
+    letter-spacing: 0.1em;
+  }
+  .pillar h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .pillar p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  /* SERVICES */
+  .services {
+    padding: 8rem 5%;
+    background: #050505;
+  }
+  .services-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+  .services-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .services-header h2 em { color: var(--amber); font-style: italic; }
+  .services-header p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(255,193,7,0.1);
+  }
+  .service-card {
+    background: #050505;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  .service-card:hover { background: #080808; }
+  .service-card:hover::before { background: var(--amber); }
+  .service-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(255,193,7,0.5);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+  .service-icon {
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(255,193,7,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .service-card:hover .service-icon {
+    border-color: var(--amber);
+    background: rgba(255,193,7,0.08);
+  }
+  .service-icon svg { width: 24px; height: 24px; stroke: var(--amber); fill: none; stroke-width: 1.5; }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .service-card p {
+    font-size: 0.925rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+  .service-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .service-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+  }
+  .service-features li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--amber);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--amber);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 1rem; }
+  .service-link svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; }
+
+  /* PROCESS */
+  .process {
+    padding: 8rem 5%;
+  }
+  .process-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  .process-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+  .process-header h2 em { color: var(--amber); font-style: italic; }
+  .process-header p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 3rem;
+    left: 12.5%;
+    right: 12.5%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,193,7,0.3) 20%, rgba(255,193,7,0.3) 80%, transparent);
+  }
+  .process-step {
+    padding: 0 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .step-circle {
+    width: 5.5rem;
+    height: 5.5rem;
+    border: 1px solid rgba(255,193,7,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    background: var(--black);
+    position: relative;
+    z-index: 1;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .process-step:hover .step-circle {
+    border-color: var(--amber);
+    background: rgba(255,193,7,0.06);
+  }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--amber);
+  }
+  .process-step h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .process-step p {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* WHY US */
+  .why {
+    padding: 8rem 5%;
+    background: #050505;
+  }
+  .why-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .why-left h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .why-left h2 em { color: var(--amber); font-style: italic; }
+  .why-left p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+  .why-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: rgba(255,193,7,0.1);
+  }
+  .why-card {
+    background: #050505;
+    padding: 2.25rem 2rem;
+    transition: background 0.3s;
+  }
+  .why-card:hover { background: #080808; }
+  .why-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255,193,7,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .why-icon svg { width: 20px; height: 20px; stroke: var(--amber); fill: none; stroke-width: 1.5; }
+  .why-card h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .why-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* QUOTE / MANIFESTO */
+  .manifesto {
+    padding: 7rem 5%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .manifesto::before {
+    content: '"';
+    position: absolute;
+    top: -1rem;
+    left: 5%;
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    color: rgba(255,193,7,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .manifesto blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .manifesto blockquote em { color: var(--amber); font-style: italic; }
+  .manifesto cite {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-style: normal;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* INDUSTRIES */
+  .industries {
+    padding: 8rem 5%;
+  }
+  .industries h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 4rem;
+  }
+  .industries h2 em { color: var(--amber); font-style: italic; }
+  .industry-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .industry-item {
+    padding: 2rem 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .industry-item:hover { background: rgba(255,193,7,0.04); }
+  .industry-item:nth-child(3n) { border-right: none; }
+  .industry-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    transition: color 0.2s;
+  }
+  .industry-item:hover .industry-name { color: var(--amber); }
+  .industry-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: rgba(255,255,255,0.2);
+    fill: none;
+    stroke-width: 2;
+    transition: stroke 0.2s, transform 0.2s;
+  }
+  .industry-item:hover .industry-arrow {
+    stroke: var(--amber);
+    transform: translate(3px, -3px);
+  }
+
+  /* CTA STRIP */
+  .cta-strip {
+    padding: 7rem 5%;
+    background: var(--amber);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4rem;
+  }
+  .cta-strip h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900;
+    color: var(--black);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .cta-strip p {
+    font-size: 1rem;
+    color: rgba(0,0,0,0.65);
+    margin-top: 1rem;
+    font-weight: 400;
+    max-width: 500px;
+  }
+  .btn-dark {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 1.1rem 2.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.2s;
+  }
+  .btn-dark:hover { transform: translateY(-2px); }
+  .btn-dark svg { width: 18px; height: 18px; stroke: var(--amber); stroke-width: 2; }
+
+  /* FOOTER */
+  footer {
+    background: #020202;
+    padding: 5rem 5% 3rem;
+    border-top: 1px solid rgba(255,193,7,0.1);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+  .footer-brand img { height: 38px; margin-bottom: 1.5rem; }
+  .footer-brand p {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 280px;
+  }
+  .footer-col h5 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .footer-col ul a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-bottom p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.3);
+  }
+  .footer-bottom p span { color: var(--amber); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="/mnt/user-data/uploads/1778338031114_The_CX_faculty_Logo_Large__3_-removebg-preview.png" alt="The CX Faculty">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Our Approach</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#industries">Industries</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span>World-Class CX Strategy</span>
+    </div>
+    <h1>
+      Experience<br>is the<br><em>New Edge.</em>
+    </h1>
+    <p class="hero-desc">
+      We combine insight, strategy, and guided execution to turn customer experience into measurable, sustainable results.
+    </p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">
+        Explore Services
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#process" class="btn-outline">Our Approach</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-num">200+</div>
+        <div class="hero-stat-label">Organisations Served</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">98%</div>
+        <div class="hero-stat-label">Client Satisfaction</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">15+</div>
+        <div class="hero-stat-label">Years Combined Expertise</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3×</div>
+        <div class="hero-stat-label">Average CX ROI Delivered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <!-- Repeated for seamless loop -->
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Customer Journey Mapping</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Training & Capability Building</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Recruitment</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Experience Design</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Voice of Customer</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Transformation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Customer Journey Mapping</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Training & Capability Building</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Recruitment</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Experience Design</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Voice of Customer</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>CX Transformation</span>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="philosophy-left reveal">
+    <div class="section-label"><span>Our Philosophy</span></div>
+    <h2>CX is not a<br>department —<br>it's a <em>discipline.</em></h2>
+    <p>At The CX Faculty, we believe exceptional customer experience is the most defensible competitive advantage available to any organisation. It cannot be copied. It must be built.</p>
+    <p>We partner with leaders who understand that experience drives loyalty, loyalty drives revenue, and revenue rewards organisations that put the customer at the centre of every decision.</p>
+  </div>
+  <div class="philosophy-right reveal reveal-delay-2">
+    <div class="pillar">
+      <span class="pillar-num">01</span>
+      <div>
+        <h4>Insight-Led</h4>
+        <p>Every engagement begins with deep diagnostic work — understanding your customers, your teams, and your gaps before prescribing solutions.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">02</span>
+      <div>
+        <h4>Strategy-Driven</h4>
+        <p>We translate insights into clear, actionable CX strategies that align with your business objectives and are built to last.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">03</span>
+      <div>
+        <h4>Execution-Guided</h4>
+        <p>We don't just hand over a report. We work alongside your teams to ensure strategy becomes reality — and results become visible.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">04</span>
+      <div>
+        <h4>Results-Obsessed</h4>
+        <p>Our success is measured in your outcomes. We track, iterate, and optimise until the numbers move in the right direction.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <div>
+      <div class="section-label"><span>What We Do</span></div>
+      <h2>Three practices.<br><em>One mission.</em></h2>
+    </div>
+    <p>Our services are designed to address every dimension of your customer experience challenge — from building internal capability, to shaping strategy, to finding the talent that will sustain it all.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">Service — 01</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>CX Training</h3>
+      <p>We build the internal capability your organisation needs to deliver consistently excellent experiences — from frontline teams to the C-suite.</p>
+      <ul class="service-features">
+        <li>CX foundations & culture programmes</li>
+        <li>Journey mapping workshops</li>
+        <li>Customer-centric leadership coaching</li>
+        <li>Bespoke in-house academies</li>
+        <li>Certification pathways</li>
+      </ul>
+      <a href="#contact" class="service-link">
+        Enquire Now
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">Service — 02</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </div>
+      <h3>CX Consultation</h3>
+      <p>Strategic consulting that turns your customer experience challenges into clear roadmaps with measurable milestones and accountable owners.</p>
+      <ul class="service-features">
+        <li>CX audits & gap analysis</li>
+        <li>Experience strategy design</li>
+        <li>Voice of Customer programmes</li>
+        <li>CX metrics & measurement frameworks</li>
+        <li>Transformation roadmapping</li>
+      </ul>
+      <a href="#contact" class="service-link">
+        Enquire Now
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">Service — 03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>CX Recruitment</h3>
+      <p>We connect organisations with the CX professionals who will build, lead, and sustain world-class customer experience functions.</p>
+      <ul class="service-features">
+        <li>Senior CX leadership search</li>
+        <li>CX team building & structure design</li>
+        <li>CX competency frameworks</li>
+        <li>Interim CX leadership</li>
+        <li>CX talent assessment</li>
+      </ul>
+      <a href="#contact" class="service-link">
+        Enquire Now
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="process-header reveal">
+    <div class="section-label" style="justify-content: center;"><span>Our Approach</span></div>
+    <h2>From <em>diagnosis</em> to delivery.</h2>
+    <p>A rigorous, repeatable process that ensures every engagement delivers lasting value.</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-circle"><span class="step-num">01</span></div>
+      <h4>Discover</h4>
+      <p>Deep-dive diagnostics to understand your current state, customer expectations, and competitive landscape.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-1">
+      <div class="step-circle"><span class="step-num">02</span></div>
+      <h4>Strategise</h4>
+      <p>Co-create a CX strategy that is ambitious, achievable, and anchored in your specific context and goals.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="step-circle"><span class="step-num">03</span></div>
+      <h4>Execute</h4>
+      <p>Guided implementation with hands-on support to ensure strategy translates into real-world action.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-3">
+      <div class="step-circle"><span class="step-num">04</span></div>
+      <h4>Optimise</h4>
+      <p>Continuous measurement, learning, and refinement to protect and compound the gains delivered.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <blockquote class="reveal">
+    "Every interaction is a moment of truth. <em>We help you win them all.</em>"
+  </blockquote>
+  <cite>— The CX Faculty</cite>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="why-left reveal">
+      <div class="section-label"><span>Why The CX Faculty</span></div>
+      <h2>Built by<br>practitioners,<br>for <em>leaders.</em></h2>
+      <p>We are not theorists. Every member of The CX Faculty has led CX transformation from the inside — which means we understand not just what to do, but how to get it done within the complexity of real organisations.</p>
+      <a href="#contact" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+        Start a Conversation
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="why-right reveal reveal-delay-2">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+        </div>
+        <h4>Practitioner Expertise</h4>
+        <p>Real-world experience leading CX change inside complex organisations across multiple industries.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h4>Measurable Results</h4>
+        <p>We set success metrics at the start and hold ourselves accountable to delivering against them.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <h4>End-to-End Capability</h4>
+        <p>From strategy through training to talent — the only CX firm that covers the full transformation lifecycle.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h4>Speed to Value</h4>
+        <p>We move fast. Our frameworks are proven, our process is efficient, and our teams are ready to deploy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="industries" id="industries">
+  <div class="reveal">
+    <div class="section-label"><span>Sectors We Serve</span></div>
+    <h2>Deep expertise across<br><em>industries that matter.</em></h2>
+  </div>
+  <div class="industry-list reveal">
+    <div class="industry-item">
+      <span class="industry-name">Financial Services & Banking</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Telecommunications</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Retail & E-Commerce</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Healthcare & Life Sciences</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Hospitality & Travel</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Public Sector & Government</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Energy & Utilities</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Insurance</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+    <div class="industry-item">
+      <span class="industry-name">Technology & SaaS</span>
+      <svg class="industry-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip" id="contact">
+  <div class="reveal">
+    <h2>Ready to transform your customer experience?</h2>
+    <p>Let's start with a conversation about where you are and where you want to be. No obligation, no jargon — just honest insight.</p>
+  </div>
+  <a href="mailto:hello@thecxfaculty.com" class="btn-dark reveal reveal-delay-2">
+    Book a Discovery Call
+    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="/mnt/user-data/uploads/1778338031114_The_CX_faculty_Logo_Large__3_-removebg-preview.png" alt="The CX Faculty">
+      <p>Combining insight, strategy, and guided execution to turn experience into results. Your partner in building world-class CX capability.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">CX Training</a></li>
+        <li><a href="#services">CX Consultation</a></li>
+        <li><a href="#services">CX Recruitment</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#why">About Us</a></li>
+        <li><a href="#process">Our Approach</a></li>
+        <li><a href="#industries">Industries</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Connect</h5>
+      <ul>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="mailto:hello@thecxfaculty.com">Email Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 The CX Faculty. All rights reserved.</p>
+    <p>Crafted with <span>♦</span> for extraordinary experiences.</p>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let rx = 0, ry = 0, mx = 0, my = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .service-card, .why-card, .industry-item, .pillar, .hero-stat, .process-step').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+  });
+
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>
