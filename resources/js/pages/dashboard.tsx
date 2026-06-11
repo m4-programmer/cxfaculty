@@ -81,6 +81,9 @@ export default function Dashboard() {
                             <Link href="/admin/posts" className="rounded-xl border border-border px-4 py-3 text-center text-sm font-semibold transition hover:bg-muted">
                                 Manage posts
                             </Link>
+                            <Link href="/admin/landing" className="rounded-xl border border-border px-4 py-3 text-center text-sm font-semibold transition hover:bg-muted">
+                                Edit landing page
+                            </Link>
                             <Link href="/admin/inquiries" className="rounded-xl border border-border px-4 py-3 text-center text-sm font-semibold transition hover:bg-muted">
                                 View inquiries ({stats.unreadInquiries})
                             </Link>

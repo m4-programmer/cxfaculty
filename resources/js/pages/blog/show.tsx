@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import BlogContent from '@/components/blog/blog-content';
 import PostCard, { type PostSummary } from '@/components/blog/post-card';
+import ShareButtons from '@/components/blog/share-buttons';
 
 type Post = {
     title: string;
@@ -102,6 +103,10 @@ export default function BlogShow() {
                                 <span>{post.reading_time} min read</span>
                                 <span aria-hidden="true">·</span>
                                 <span>{post.views} views</span>
+                            </div>
+
+                            <div className="mt-6">
+                                <ShareButtons url={seo.canonical} title={post.title} excerpt={post.excerpt} />
                             </div>
                         </header>
 

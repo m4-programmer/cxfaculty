@@ -18,6 +18,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
         { href: '/', label: 'Home' },
         { href: '/#services', label: 'Services' },
         { href: '/blog', label: 'Blog' },
+        { href: '/community/join', label: 'Community' },
         { href: '/#contact', label: 'Contact' },
     ];
 
@@ -112,6 +113,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                     </div>
                     <div className="flex flex-wrap gap-4 text-sm text-white/60">
                         <Link href="/blog" className="transition hover:text-amber-300">Blog</Link>
+                        <Link href="/community/join" className="transition hover:text-amber-300">Community</Link>
                         <Link href="/#contact" className="transition hover:text-amber-300">Contact</Link>
                         <Link href="/sitemap.xml" className="transition hover:text-amber-300">Sitemap</Link>
                     </div>

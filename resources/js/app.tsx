@@ -1,3 +1,4 @@
+import './preview-boot';
 import { createInertiaApp } from '@inertiajs/react';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -15,6 +16,7 @@ createInertiaApp({
         switch (true) {
             case name === 'welcome':
             case name.startsWith('blog/'):
+            case name.startsWith('community/'):
             case name === 'contact':
                 return SiteLayout;
             case name.startsWith('auth/'):

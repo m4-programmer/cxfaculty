@@ -15,8 +15,8 @@ class ImageUploadController extends Controller
         ]);
 
         $image = $request->file('image');
-        $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
-        
+        $filename = Str::uuid().'.'.$image->getClientOriginalExtension();
+
         $path = $image->storeAs('blog-images', $filename, 'public');
 
         return response()->json([
@@ -31,7 +31,7 @@ class ImageUploadController extends Controller
             'filename' => ['required', 'string'],
         ]);
 
-        Storage::disk('public')->delete('blog-images/' . $request->filename);
+        Storage::disk('public')->delete('blog-images/'.$request->filename);
 
         return response()->json(['success' => true]);
     }

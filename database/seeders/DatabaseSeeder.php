@@ -44,5 +44,7 @@ class DatabaseSeeder extends Seeder
             'published_at' => now()->subDays(3),
             'is_published' => true,
         ]);
+
+        $this->call(LandingPageSeeder::class);
     }
 }

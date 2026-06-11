@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactInquiryReceived;
 use App\Models\ContactInquiry;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 
 class ContactController extends Controller
@@ -29,13 +31,15 @@ class ContactController extends Controller
             'website' => ['nullable', 'max:0'],
         ]);
 
-        ContactInquiry::create([
+        $inquiry = ContactInquiry::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'subject' => $validated['subject'],
             'message' => $validated['message'],
             'ip_address' => $request->ip(),
         ]);
+
+        Mail::to(config('cx.owner_email'))->send(new ContactInquiryReceived($inquiry));
 
         return back()->with('success', 'Thank you! Your inquiry has been received.');
     }

@@ -27,3 +27,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+# Note: dist-preview is NOT gitignored so Vercel CLI can upload it.
+# Regenerate with: npm run build:preview
