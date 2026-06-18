@@ -48,12 +48,13 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                                 Dashboard
                             </Link>
                         ) : (
-                            <Link
-                                href="/login"
-                                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-white transition hover:border-amber-300 hover:text-amber-300"
-                            >
-                                Log in
-                            </Link>
+                            <></>
+                            // <Link
+                            //     href="/login"
+                            //     className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-white transition hover:border-amber-300 hover:text-amber-300"
+                            // >
+                            //     Log in
+                            // </Link>
                         )}
                     </div>
 
@@ -89,13 +90,14 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                                     Dashboard
                                 </Link>
                             ) : (
-                                <Link
-                                    href="/login"
-                                    className="rounded-xl border border-white/15 px-3 py-2 text-center text-sm font-semibold uppercase tracking-[0.18em] text-white"
-                                    onClick={() => setMobileOpen(false)}
-                                >
-                                    Log in
-                                </Link>
+                                <> </>
+                                // <Link
+                                //     href="/login"
+                                //     className="rounded-xl border border-white/15 px-3 py-2 text-center text-sm font-semibold uppercase tracking-[0.18em] text-white"
+                                //     onClick={() => setMobileOpen(false)}
+                                // >
+                                //     Log in
+                                // </Link>
                             )}
                         </nav>
                     </div>
