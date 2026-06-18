@@ -27,7 +27,8 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
             <header className="sticky top-0 z-50 border-b border-white/10 bg-black/95 backdrop-blur-md">
                 <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
                     <Link href="/" className="text-sm font-semibold uppercase tracking-[0.33em] text-amber-300">
-                        CX Faculty
+                        <img src="/logo.png" alt="CX Faculty Logo" className="inline-block h-6 w-auto mr-2"
+                            style={{ height: '10.5rem', width: 'auto' }} />
                     </Link>
 
                     <nav className="hidden items-center gap-8 text-sm uppercase tracking-[0.22em] text-white/75 md:flex">
