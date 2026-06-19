@@ -23,10 +23,23 @@ class LandingPageTest extends TestCase
 
         $response->assertOk();
         $response->assertInertia(fn (Assert $page) => $page
-            ->component('welcome')
+            ->component('home')
             ->has('landing.seo.title')
-            ->has('landing.hero.headline')
+            ->has('landing.hero.headline_emphasis')
             ->has('landing.services.items', 3)
+            ->has('whatsappSchedulingUrl')
+        );
+    }
+
+    public function test_v2_landing_page_is_available_for_comparison(): void
+    {
+        $response = $this->get(route('landing.v2'));
+
+        $response->assertOk();
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('welcome-v2')
+            ->has('landing.hero.headline')
+            ->has('landing.sidebar.enabled')
         );
     }
 
@@ -34,13 +47,13 @@ class LandingPageTest extends TestCase
     {
         $landingPage = LandingPage::current();
         $content = $landingPage->resolvedContent();
-        $content['hero']['headline'] = 'Custom headline from admin';
+        $content['hero']['headline_emphasis'] = 'Custom emphasis from admin';
         $landingPage->update(['content' => $content]);
 
         $response = $this->get(route('home'));
 
         $response->assertInertia(fn (Assert $page) => $page
-            ->where('landing.hero.headline', 'Custom headline from admin')
+            ->where('landing.hero.headline_emphasis', 'Custom emphasis from admin')
         );
     }
 
@@ -52,14 +65,123 @@ class LandingPageTest extends TestCase
         $response->assertOk();
         $response->assertInertia(fn (Assert $page) => $page
             ->component('admin/landing/edit')
-            ->has('content.hero.headline')
+            ->has('content.seo.title')
+            ->has('content.nav.cta_label')
+            ->has('content.hero.headline_emphasis')
+            ->has('content.hero.stats', 4)
+            ->has('content.ticker.items')
+            ->has('content.philosophy.pillars', 4)
+            ->has('content.services.items', 3)
+            ->has('content.process.steps', 4)
+            ->has('content.manifesto.quote')
+            ->has('content.why.cards', 4)
+            ->has('content.industries.items')
+            ->has('content.cta_strip.headline')
+            ->has('content.blog.headline_emphasis')
+            ->has('content.community.headline')
+            ->has('content.contact.headline')
+            ->has('content.footer.service_links')
+            ->has('content.footer.company_links')
+            ->has('content.footer.connect_links')
+            ->has('integrations.whatsapp_scheduling_url')
+            ->has('integrations.whatsapp_community_url')
+            ->has('integrations.discovery_call_message')
+            ->has('integrations.conversation_message')
         );
+    }
+
+    public function test_landing_page_cms_does_not_affect_v2_page(): void
+    {
+        $landingPage = LandingPage::current();
+        $content = $landingPage->resolvedContent();
+        $content['hero']['headline_emphasis'] = 'CMS-only headline change';
+        $landingPage->update(['content' => $content]);
+
+        $response = $this->get(route('landing.v2'));
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->where('landing.hero.headline', 'Transform your customer experience with clean design, smarter content, and a real CMS.')
+            ->missing('landing.hero.headline_emphasis')
+        );
+    }
+
+    public function test_admin_can_update_site_integrations(): void
+    {
+        $response = $this->actingAs($this->admin())
+            ->put(route('admin.landing.integrations.update'), [
+                'integrations' => [
+                    'whatsapp_scheduling_url' => 'https://wa.me/15551234567',
+                    'whatsapp_community_url' => 'https://chat.whatsapp.com/example-group',
+                    'discovery_call_message' => 'Hi, I want a discovery call.',
+                    'conversation_message' => 'Hi, let us talk about CX.',
+                ],
+            ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->get(route('home'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('whatsappSchedulingUrl', 'https://wa.me/15551234567')
+                ->where('cxIntegrations.discovery_call_message', 'Hi, I want a discovery call.')
+            );
+
+        $this->get(route('community.join'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('whatsappCommunityUrl', 'https://chat.whatsapp.com/example-group')
+            );
+    }
+
+    public function test_admin_can_update_footer_links(): void
+    {
+        $content = LandingPage::defaultContent();
+        $content['footer']['company_links'][0] = [
+            'label' => 'Our Story',
+            'href' => '#why',
+        ];
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.landing.update'), ['content' => $content])
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->get(route('home'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('landing.footer.company_links.0.label', 'Our Story')
+            );
+    }
+
+    public function test_landing_page_content_is_normalized_on_save(): void
+    {
+        $legacyContent = [
+            'hero' => [
+                'headline_emphasis' => 'Legacy headline',
+            ],
+            'sidebar' => [
+                'enabled' => true,
+            ],
+        ];
+
+        LandingPage::current()->update(['content' => $legacyContent]);
+
+        $this->actingAs($this->admin())
+            ->put(route('admin.landing.update'), [
+                'content' => LandingPage::normalizeContent($legacyContent),
+            ])
+            ->assertRedirect();
+
+        $resolved = LandingPage::current()->fresh()->resolvedContent();
+
+        $this->assertSame('Legacy headline', $resolved['hero']['headline_emphasis']);
+        $this->assertArrayHasKey('nav', $resolved);
+        $this->assertArrayHasKey('manifesto', $resolved);
+        $this->assertArrayNotHasKey('sidebar', $resolved);
     }
 
     public function test_admin_can_update_landing_page_content(): void
     {
         $content = LandingPage::defaultContent();
-        $content['hero']['headline'] = 'Updated hero headline';
+        $content['hero']['headline_emphasis'] = 'Updated hero emphasis';
         $content['services']['enabled'] = false;
 
         $response = $this->actingAs($this->admin())
@@ -76,7 +198,7 @@ class LandingPageTest extends TestCase
 
         $this->get(route('home'))
             ->assertInertia(fn (Assert $page) => $page
-                ->where('landing.hero.headline', 'Updated hero headline')
+                ->where('landing.hero.headline_emphasis', 'Updated hero emphasis')
                 ->where('landing.services.enabled', false)
             );
     }
@@ -91,7 +213,7 @@ class LandingPageTest extends TestCase
     {
         $user = User::factory()->create(['is_admin' => false]);
         $content = LandingPage::defaultContent();
-        $content['hero']['headline'] = 'Should not save';
+        $content['hero']['headline_emphasis'] = 'Should not save';
 
         $this->actingAs($user)
             ->put(route('admin.landing.update'), ['content' => $content])

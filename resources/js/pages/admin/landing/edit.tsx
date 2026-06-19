@@ -1,25 +1,41 @@
 import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import LandingPageForm from '@/components/admin/landing-page-form';
+import SiteIntegrationsForm from '@/components/admin/site-integrations-form';
 import { Button } from '@/components/ui/button';
 import { dashboard } from '@/routes';
 import type { LandingPageContent } from '@/types/landing-page';
+import type { SiteIntegrations } from '@/types/site-integrations';
 
 type AdminLandingEditPageProps = {
     content: LandingPageContent;
+    integrations: SiteIntegrations;
     flash?: { success?: string };
 };
 
-export default function AdminLandingEdit() {
-    const { content, flash } = usePage<AdminLandingEditPageProps>().props;
+type Tab = 'content' | 'integrations';
 
-    const form = useForm({
+export default function AdminLandingEdit() {
+    const { content, integrations, flash } = usePage<AdminLandingEditPageProps>().props;
+    const [activeTab, setActiveTab] = useState<Tab>('content');
+
+    const contentForm = useForm({
         content,
     });
 
-    function submit(event: FormEvent<HTMLFormElement>) {
+    const integrationsForm = useForm({
+        integrations,
+    });
+
+    function submitContent(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        form.put('/admin/landing', { preserveScroll: true });
+        contentForm.put('/admin/landing', { preserveScroll: true });
+    }
+
+    function submitIntegrations(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        integrationsForm.put('/admin/landing/integrations', { preserveScroll: true });
     }
 
     return (
@@ -38,12 +54,14 @@ export default function AdminLandingEdit() {
                         <p className="text-sm text-muted-foreground">Site content</p>
                         <h1 className="text-2xl font-bold">Landing page</h1>
                         <p className="mt-1 text-sm text-muted-foreground">
-                            Update homepage copy, section visibility, and call-to-action labels.
+                            Manage the main homepage content, WhatsApp CTAs, and community invite link.
                         </p>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
-                            <Link href="/" target="_blank">Preview site</Link>
+                            <Link href="/" target="_blank">
+                                Preview site
+                            </Link>
                         </Button>
                         <Button variant="outline" asChild>
                             <Link href={dashboard()}>Back to dashboard</Link>
@@ -51,7 +69,36 @@ export default function AdminLandingEdit() {
                     </div>
                 </div>
 
-                <LandingPageForm form={form} onSubmit={submit} />
+                <div className="flex flex-wrap gap-2 border-b border-border pb-1">
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('content')}
+                        className={`rounded-t-lg px-4 py-2 text-sm font-medium transition ${
+                            activeTab === 'content'
+                                ? 'border-b-2 border-primary text-foreground'
+                                : 'text-muted-foreground hover:text-foreground'
+                        }`}
+                    >
+                        Page content
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('integrations')}
+                        className={`rounded-t-lg px-4 py-2 text-sm font-medium transition ${
+                            activeTab === 'integrations'
+                                ? 'border-b-2 border-primary text-foreground'
+                                : 'text-muted-foreground hover:text-foreground'
+                        }`}
+                    >
+                        WhatsApp & community
+                    </button>
+                </div>
+
+                {activeTab === 'content' ? (
+                    <LandingPageForm form={contentForm} onSubmit={submitContent} />
+                ) : (
+                    <SiteIntegrationsForm form={integrationsForm} onSubmit={submitIntegrations} />
+                )}
             </div>
         </>
     );

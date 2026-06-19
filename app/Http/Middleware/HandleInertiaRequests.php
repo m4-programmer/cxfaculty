@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\LandingPage;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,6 +37,9 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $landingContent = LandingPage::current()->resolvedContent();
+        $integrations = SiteSetting::integrations();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,6 +51,12 @@ class HandleInertiaRequests extends Middleware
                 'communityJoined' => fn () => $request->session()->get('communityJoined', false),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'cxShell' => [
+                'nav' => $landingContent['nav'],
+                'footer' => $landingContent['footer'],
+            ],
+            'cxIntegrations' => $integrations,
+            'whatsappSchedulingUrl' => $integrations['whatsapp_scheduling_url'],
         ];
     }
 }

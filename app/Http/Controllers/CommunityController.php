@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommunityMember;
+use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,7 +15,7 @@ class CommunityController extends Controller
     public function create(): Response
     {
         return Inertia::render('community/join', [
-            'whatsappCommunityUrl' => config('cx.whatsapp_community_url'),
+            'whatsappCommunityUrl' => SiteSetting::whatsappCommunityUrl(),
         ]);
     }
 

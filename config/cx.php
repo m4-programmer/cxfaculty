@@ -18,10 +18,21 @@ return [
     | WhatsApp Community URL
     |--------------------------------------------------------------------------
     |
-    | Invite link shown to users after they join the community via the form.
+    | Fallback when not set in Admin → Landing page → WhatsApp & community.
     |
     */
 
     'whatsapp_community_url' => env('WHATSAPP_COMMUNITY_URL', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | WhatsApp Scheduling URL
+    |--------------------------------------------------------------------------
+    |
+    | Fallback when not set in Admin → Landing page → WhatsApp & community.
+    |
+    */
+
+    'whatsapp_scheduling_url' => env('WHATSAPP_SCHEDULING_URL', ''),
 
 ];

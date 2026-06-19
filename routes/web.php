@@ -9,10 +9,12 @@ use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\LandingV2Controller;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/v2', LandingV2Controller::class)->name('landing.v2');
 
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:10,1')
@@ -49,6 +51,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/landing', [LandingPageController::class, 'edit'])->name('admin.landing.edit');
     Route::put('/admin/landing', [LandingPageController::class, 'update'])->name('admin.landing.update');
+    Route::put('/admin/landing/integrations', [LandingPageController::class, 'updateIntegrations'])->name('admin.landing.integrations.update');
 });
 
 require __DIR__.'/settings.php';
