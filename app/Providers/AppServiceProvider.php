@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\View\Composers\CxSiteComposer;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer(['layouts.cx', 'home', 'blog.index', 'blog.show', 'community.join'], CxSiteComposer::class);
+
         $this->configureDefaults();
     }
 

@@ -7,14 +7,13 @@ use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class CommunityController extends Controller
 {
-    public function create(): Response
+    public function create(): View
     {
-        return Inertia::render('community/join', [
+        return view('community.join', [
             'whatsappCommunityUrl' => SiteSetting::whatsappCommunityUrl(),
         ]);
     }

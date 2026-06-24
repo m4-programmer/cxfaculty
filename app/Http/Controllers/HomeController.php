@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use App\Models\LandingPage;
 use Illuminate\Support\Collection;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(): Response
+    public function __invoke(): View
     {
-        return Inertia::render('home', [
+        return view('home', [
             'landing' => LandingPage::current()->resolvedContent(),
             'featuredPosts' => $this->featuredPosts(),
         ]);

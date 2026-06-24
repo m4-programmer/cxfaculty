@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\CommunityMember;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class CommunityJoinTest extends TestCase
@@ -18,10 +17,8 @@ class CommunityJoinTest extends TestCase
         $response = $this->get(route('community.join'));
 
         $response->assertOk();
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('community/join')
-            ->where('whatsappCommunityUrl', 'https://chat.whatsapp.com/example')
-        );
+        $response->assertViewIs('community.join');
+        $response->assertViewHas('whatsappCommunityUrl', 'https://chat.whatsapp.com/example');
     }
 
     public function test_community_form_stores_member_and_shows_success(): void

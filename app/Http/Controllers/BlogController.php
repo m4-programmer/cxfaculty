@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $query = BlogPost::published();
 
@@ -44,7 +43,7 @@ class BlogController extends Controller
             ->keys()
             ->values();
 
-        return Inertia::render('blog/index', [
+        return view('blog.index', [
             'posts' => $posts,
             'filters' => $request->only('search', 'tag'),
             'popularTags' => $allTags,
@@ -52,7 +51,7 @@ class BlogController extends Controller
         ]);
     }
 
-    public function show(BlogPost $post): Response
+    public function show(BlogPost $post): View
     {
         $canPreview = Auth::check() && Auth::user()->is_admin;
         abort_unless($post->is_published || $canPreview, 404);
@@ -71,7 +70,7 @@ class BlogController extends Controller
             ? (str_starts_with($post->featured_image, 'http') ? $post->featured_image : url($post->featured_image))
             : url('/images/og-image.png');
 
-        return Inertia::render('blog/show', [
+        return view('blog.show', [
             'post' => [
                 'title' => $post->title,
                 'excerpt' => $post->excerpt,

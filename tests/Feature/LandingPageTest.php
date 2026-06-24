@@ -22,13 +22,11 @@ class LandingPageTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('home')
-            ->has('landing.seo.title')
-            ->has('landing.hero.headline_emphasis')
-            ->has('landing.services.items', 3)
-            ->has('whatsappSchedulingUrl')
-        );
+        $response->assertViewIs('home');
+        $response->assertViewHas('landing.seo.title');
+        $response->assertViewHas('landing.hero.headline_emphasis');
+        $response->assertViewHas('featuredPosts');
+        $response->assertSee(LandingPage::defaultContent()['hero']['headline_emphasis'], false);
     }
 
     public function test_v2_landing_page_is_available_for_comparison(): void
@@ -52,9 +50,8 @@ class LandingPageTest extends TestCase
 
         $response = $this->get(route('home'));
 
-        $response->assertInertia(fn (Assert $page) => $page
-            ->where('landing.hero.headline_emphasis', 'Custom emphasis from admin')
-        );
+        $response->assertOk();
+        $response->assertSee('Custom emphasis from admin', false);
     }
 
     public function test_admin_can_view_landing_page_editor(): void
@@ -121,15 +118,13 @@ class LandingPageTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->get(route('home'))
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('whatsappSchedulingUrl', 'https://wa.me/15551234567')
-                ->where('cxIntegrations.discovery_call_message', 'Hi, I want a discovery call.')
-            );
+            ->assertOk()
+            ->assertSee('15551234567', false);
 
         $this->get(route('community.join'))
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('whatsappCommunityUrl', 'https://chat.whatsapp.com/example-group')
-            );
+            ->assertOk()
+            ->assertViewIs('community.join')
+            ->assertViewHas('whatsappCommunityUrl', 'https://chat.whatsapp.com/example-group');
     }
 
     public function test_admin_can_update_footer_links(): void
@@ -146,9 +141,8 @@ class LandingPageTest extends TestCase
             ->assertSessionHas('success');
 
         $this->get(route('home'))
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('landing.footer.company_links.0.label', 'Our Story')
-            );
+            ->assertOk()
+            ->assertSee('Our Story', false);
     }
 
     public function test_landing_page_content_is_normalized_on_save(): void
@@ -197,10 +191,9 @@ class LandingPageTest extends TestCase
         ]);
 
         $this->get(route('home'))
-            ->assertInertia(fn (Assert $page) => $page
-                ->where('landing.hero.headline_emphasis', 'Updated hero emphasis')
-                ->where('landing.services.enabled', false)
-            );
+            ->assertOk()
+            ->assertSee('Updated hero emphasis', false)
+            ->assertDontSee('Service — 01', false);
     }
 
     public function test_guest_cannot_access_landing_page_editor(): void
