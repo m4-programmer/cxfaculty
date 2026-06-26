@@ -325,6 +325,7 @@ class LandingPage extends Model
                 'brand_description' => 'Combining insight, strategy, and guided execution to turn experience into results. Your partner in building world-class CX capability.',
                 'copyright' => '©2026 The CX Faculty. All rights reserved.',
                 'tagline' => 'Crafted with ♦ for extraordinary experiences.',
+                'tagline' => 'Crafted with ♦ for extraordinary experiences.',
                 'service_links' => [
                     ['label' => 'CX Training', 'href' => '#services'],
                     ['label' => 'CX Consultation', 'href' => '#services'],

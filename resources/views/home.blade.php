@@ -4,6 +4,43 @@
     <title>{{ $landing['seo']['title'] }}</title>
     <meta name="description" content="{{ $landing['seo']['description'] }}">
     <link rel="canonical" href="{{ url('/') }}">
+    <style>
+        .cx-hero-visual {
+            padding: 0 32px;
+        }
+        .cx-hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cx-hero-visual img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+
+        @media (max-width: 992px) {
+            .cx-hero-visual {
+                padding: 0 20px;
+            }
+            .cx-hero-visual {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .cx-hero-visual img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .cx-hero-visual img {
+                display: none;
+            }
+        }
+        </style>
 @endsection
 
 @section('content')
@@ -31,14 +68,17 @@
             </div>
         </div>
         <div class="cx-hero-visual">
-            <div class="cx-hero-stat-grid">
+            <!-- <div class="cx-hero-stat-grid">
                 @foreach ($landing['hero']['stats'] as $stat)
                     <div class="cx-hero-stat">
                         <div class="cx-hero-stat-num">{{ $stat['value'] }}</div>
                         <div class="cx-hero-stat-label">{{ $stat['label'] }}</div>
                     </div>
                 @endforeach
-            </div>
+            </div> -->
+            <img src="https://images.unsplash.com/photo-1556745753-b2904692b3cd?q=80&w=1073&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                alt="Hero Visual" style="object-fit: cover;">
+            
         </div>
     </section>
 
@@ -250,6 +290,11 @@
 
     @if ($landing['contact']['enabled'])
         <section class="cx-contact" id="contact">
+            @if (session('contact_submitted') && session('success'))
+                <div class="cx-flash cx-flash-success cx-reveal visible" id="contact-success" role="alert" style="margin: 0 5% 2rem; max-width: none;">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="cx-contact-grid cx-reveal">
                 <div>
                     <div class="cx-section-label">
@@ -257,11 +302,8 @@
                     </div>
                     <h2 class="cx-headline">{{ $landing['contact']['headline'] }}</h2>
                     <p>{{ $landing['contact']['description'] }}</p>
-                    @if (session('success'))
-                        <div class="cx-flash">{{ session('success') }}</div>
-                    @endif
                 </div>
-                <form method="post" action="{{ route('contact.submit') }}" class="cx-form">
+                <form method="post" action="{{ route('contact.submit') }}" class="cx-form" id="contact-form">
                     @csrf
                     <input
                         type="text"
@@ -323,3 +365,22 @@
         </section>
     @endif
 @endsection
+
+@if (session('contact_submitted') || $errors->any())
+    @push('scripts')
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                const contactSection = document.getElementById('contact');
+                const successAlert = document.getElementById('contact-success');
+
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
+                if (successAlert) {
+                    successAlert.focus?.();
+                }
+            });
+        </script>
+    @endpush
+@endif

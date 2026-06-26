@@ -52,6 +52,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/landing', [LandingPageController::class, 'edit'])->name('admin.landing.edit');
     Route::put('/admin/landing', [LandingPageController::class, 'update'])->name('admin.landing.update');
     Route::put('/admin/landing/integrations', [LandingPageController::class, 'updateIntegrations'])->name('admin.landing.integrations.update');
+    Route::put('/admin/landing/appearance', [LandingPageController::class, 'updateAppearance'])->name('admin.landing.appearance.update');
+    Route::post('/admin/landing/logo', [LandingPageController::class, 'uploadLogo'])->name('admin.landing.logo.upload');
+    Route::put('/admin/landing/scripts', [LandingPageController::class, 'updateScripts'])->name('admin.landing.scripts.update');
 });
 
 require __DIR__.'/settings.php';

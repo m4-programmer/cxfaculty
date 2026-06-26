@@ -1,7 +1,7 @@
 <footer class="cx-footer">
     <div class="cx-footer-grid">
         <div class="cx-footer-brand">
-            <img src="/logo.png" alt="The CX Faculty">
+            <img src="{{ $siteLogo['url'] }}" alt="The CX Faculty">
             <p>{{ $cxShell['footer']['brand_description'] }}</p>
         </div>
         <div class="cx-footer-col">

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Home, Inbox, LayoutGrid } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -16,38 +16,46 @@ import {
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Blog posts',
-        href: '/admin/posts',
-        icon: BookOpen,
-    },
-    {
-        title: 'Landing page',
-        href: '/admin/landing',
-        icon: Home,
-    },
-    {
-        title: 'Inquiries',
-        href: '/admin/inquiries',
-        icon: Inbox,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'View site',
-        href: '/',
-        icon: BookOpen,
-    },
-];
+type AdminNotifications = {
+    unreadInquiries: number;
+};
 
 export function AppSidebar() {
+    const { adminNotifications } = usePage<{ adminNotifications?: AdminNotifications | null }>().props;
+    const unreadInquiries = adminNotifications?.unreadInquiries ?? 0;
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Blog posts',
+            href: '/admin/posts',
+            icon: BookOpen,
+        },
+        {
+            title: 'Landing page',
+            href: '/admin/landing',
+            icon: Home,
+        },
+        {
+            title: 'Inquiries',
+            href: '/admin/inquiries',
+            icon: Inbox,
+            badge: unreadInquiries,
+        },
+    ];
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: 'View site',
+            href: '/',
+            icon: BookOpen,
+        },
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

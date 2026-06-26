@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ContactInquiry;
 use App\Models\LandingPage;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
@@ -57,6 +58,11 @@ class HandleInertiaRequests extends Middleware
             ],
             'cxIntegrations' => $integrations,
             'whatsappSchedulingUrl' => $integrations['whatsapp_scheduling_url'],
+            'adminNotifications' => fn () => $request->user()?->is_admin
+                ? [
+                    'unreadInquiries' => ContactInquiry::whereNull('read_at')->count(),
+                ]
+                : null,
         ];
     }
 }

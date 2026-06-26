@@ -13,6 +13,8 @@ class CxSiteComposer
     {
         $landing = LandingPage::current()->resolvedContent();
         $integrations = SiteSetting::integrations();
+        $appearance = SiteSetting::appearance();
+        $scripts = SiteSetting::scripts();
 
         $view->with([
             'cxShell' => [
@@ -29,6 +31,11 @@ class CxSiteComposer
                 $integrations['whatsapp_scheduling_url'],
                 $integrations['conversation_message'],
             ),
+            'siteAppearance' => $appearance,
+            'siteScripts' => $scripts,
+            'siteLogo' => $appearance['logo'],
+            'blogTheme' => $appearance['blog'],
+            'applyBlogTheme' => request()->routeIs('blog.*'),
         ]);
     }
 }

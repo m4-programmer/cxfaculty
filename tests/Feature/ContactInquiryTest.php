@@ -25,8 +25,9 @@ class ContactInquiryTest extends TestCase
             'message' => 'We would like to discuss a CX project.',
         ]);
 
-        $response->assertRedirect();
+        $response->assertRedirect(route('home').'#contact');
         $response->assertSessionHas('success');
+        $response->assertSessionHas('contact_submitted', true);
 
         $this->assertDatabaseHas('contact_inquiries', [
             'name' => 'Jane Doe',
