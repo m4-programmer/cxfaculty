@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ImageUploadController extends Controller
@@ -11,16 +10,26 @@ class ImageUploadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => ['required', 'image', 'max:5120'], // 5MB
+            'image' => ['required', 'file', 'max:5120'], // 5MB
         ]);
 
         $image = $request->file('image');
         $filename = Str::uuid().'.'.$image->getClientOriginalExtension();
 
-        $path = $image->storeAs('blog-images', $filename, 'public');
+        // Create directory if it doesn't exist
+        $directory = public_path('blog-images');
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        // Store directly in public/blog-images
+        $image->move($directory, $filename);
+
+        // Return full URL using asset() helper for proper local/production compatibility
+        $url = asset('blog-images/'.$filename);
 
         return response()->json([
-            'url' => Storage::url($path),
+            'url' => $url,
             'filename' => $filename,
         ]);
     }
@@ -31,7 +40,11 @@ class ImageUploadController extends Controller
             'filename' => ['required', 'string'],
         ]);
 
-        Storage::disk('public')->delete('blog-images/'.$request->filename);
+        $filepath = public_path('blog-images/'.$request->filename);
+
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
 
         return response()->json(['success' => true]);
     }
