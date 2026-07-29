@@ -29,7 +29,7 @@
             ← Back to all articles
         </a>
 
-        <article class="cx-article cx-reveal">
+        <article class="cx-article">
             @if (! $post['is_published'])
                 <div class="cx-flash" style="margin-bottom: 1.5rem">
                     Draft preview — this post is not published yet.

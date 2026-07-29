@@ -1302,6 +1302,14 @@ body.cx-body {
     transform: translateY(0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .cx-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 .cx-reveal-delay-1 {
     transition-delay: 0.1s;
 }

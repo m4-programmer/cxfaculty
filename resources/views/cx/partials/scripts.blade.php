@@ -52,6 +52,8 @@
             element.addEventListener('mouseleave', removeHover);
         });
 
+        // threshold: 0 so tall elements (e.g. full blog articles) still reveal on mobile
+        // when any pixel enters the viewport — 0.12 fails when element height >> viewport.
         const observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
@@ -59,9 +61,14 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.12 });
+        }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
 
         document.querySelectorAll('.cx-reveal').forEach(function (element) {
+            if (element.offsetHeight > window.innerHeight * 0.85) {
+                element.classList.add('visible');
+                return;
+            }
+
             observer.observe(element);
         });
 
